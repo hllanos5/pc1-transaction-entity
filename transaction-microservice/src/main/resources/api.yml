@@ -1,0 +1,194 @@
+openapi: 3.0.0
+info:
+  title: Transaction Microservice
+  description: Transaction Microservice
+  version: 1.0.0
+servers:
+  - url: http://localhost:8082
+paths:
+  /transaction:
+    post:
+      tags:
+        - transaction
+      summary: Add a new transaction to the database
+      description: Add a new transaction to the database
+      operationId: createTransaction
+      requestBody:
+        description: Create a new transaction in the database
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        "405":
+          description: Invalid input
+    get:
+      tags:
+        - transaction
+      summary: List all transactions from the database
+      description: List all transactions from the database
+      operationId: findAllTransaction
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Response'
+        "204":
+          description: No Transaction found
+        "405":
+          description: Invalid input
+  /transaction/{id}:
+    get:
+      tags:
+        - transaction
+      summary: Find transaction by ID
+      description: Returns a single transaction
+      operationId: getTransactionById
+      parameters:
+        - name: id
+          in: path
+          description: Id of transaction to return
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Transaction not found
+    delete:
+      tags:
+        - transaction
+      summary: Delete a transaction
+      description: delete a transaction
+      operationId: deleteTransaction
+      parameters:
+        - name: id
+          in: path
+          description: Transaction id to delete
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "400":
+          description: Invalid transaction value
+    put:
+      tags:
+        - transaction
+      summary: Update an existing transaction
+      description: Update an existing transaction by Id
+      operationId: updateTransaction
+      parameters:
+        - name: id
+          in: path
+          description: ID of transaction to update
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update an existent client in the database
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Customer not found
+        "405":
+          description: Validation exception
+  /transaction/product/{productId}:
+    get:
+      tags:
+        - transaction
+      summary: Find transaction by ProductId
+      description: Returns a single transaction
+      operationId: getTransactionByProductId
+      parameters:
+        - name: productId
+          in: path
+          description: productId of Product to return
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        "400":
+          description: Invalid ProductId supplied
+        "404":
+          description: Transaction not found
+components:
+  schemas:
+    Response:
+      type: object
+      additionalProperties:
+        type: object
+    Transaction:
+      required:
+        - productId
+        - type
+        - amount
+        - createAt
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        productId:
+          type: string
+        type:
+          type: string
+          description: type
+          example: "Ingreso" #Ingreso/Egreso
+        amount:
+          type: double
+          example: 102.20
+        createAt:
+          type: string
+          format: date-time
+          description: Creation date
+          example: "2022-10-27T20:30:00Z"
+          readOnly: true
+  requestBodies:
+    transaction:
+      description: transaction object that needs to be added to the database
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Transaction'
