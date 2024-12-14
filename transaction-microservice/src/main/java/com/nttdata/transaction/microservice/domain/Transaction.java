@@ -16,7 +16,7 @@ import java.util.Date;
 public class Transaction {
     @Id
     private String id;
-    private String productId;
+    private String clientId;
     private String type;
     private Double amount;
     @CreatedDate

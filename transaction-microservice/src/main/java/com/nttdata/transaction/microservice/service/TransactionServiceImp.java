@@ -28,8 +28,8 @@ public class TransactionServiceImp implements TransactionService {
     }
 
     @Override
-    public Mono<Transaction> findByProductId(String productId) {
-        return transactionRepository.findByProductId(productId);
+    public Flux<Transaction> findByClientId(String clientId) {
+        return transactionRepository.findByClientId(clientId);
     }
 
     @Override

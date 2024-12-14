@@ -126,17 +126,17 @@ paths:
           description: Customer not found
         "405":
           description: Validation exception
-  /transaction/product/{productId}:
+  /transaction/client/{clientId}:
     get:
       tags:
         - transaction
-      summary: Find transaction by ProductId
+      summary: Find transaction by ClientId
       description: Returns a single transaction
-      operationId: getTransactionByProductId
+      operationId: getTransactionByClientId
       parameters:
-        - name: productId
+        - name: clientId
           in: path
-          description: productId of Product to return
+          description: clientId of Client to return
           required: true
           style: simple
           explode: false
@@ -148,7 +148,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Transaction'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Response'
         "400":
           description: Invalid ProductId supplied
         "404":
@@ -161,7 +163,7 @@ components:
         type: object
     Transaction:
       required:
-        - productId
+        - clientId
         - type
         - amount
         - createAt
@@ -170,7 +172,7 @@ components:
         id:
           type: string
           readOnly: true
-        productId:
+        clientId:
           type: string
         type:
           type: string

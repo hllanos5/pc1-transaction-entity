@@ -73,7 +73,7 @@ public class TransactionController implements TransactionApi {
         Flux<Map<String, Object>> productsMapFlux = clientsFlux.map(transaction -> {
             Map<String, Object> transactionMap = new HashMap<>();
             transactionMap.put("id", transaction.getId());
-            transactionMap.put("productId", transaction.getProductId());
+            transactionMap.put("clientId", transaction.getClientId());
             transactionMap.put("type", transaction.getType());
             transactionMap.put("amount", transaction.getAmount());
             transactionMap.put("createAt", transaction.getCreatedAt());
@@ -87,12 +87,22 @@ public class TransactionController implements TransactionApi {
     }
 
     @Override
-    public Mono<ResponseEntity<Transaction>> getTransactionByProductId(String transactionId, ServerWebExchange exchange) {
+    public Mono<ResponseEntity<Flux<Map<String, Object>>>> getTransactionByClientId(String clientId, ServerWebExchange exchange) {
+        Flux<com.nttdata.transaction.microservice.domain.Transaction> clientsFlux = transactionService.findByClientId(clientId);
 
-        return transactionService.findByProductId(transactionId)
-                .map(transactionMapper::toModel)
-                .map(ResponseEntity::ok)
-                .defaultIfEmpty(ResponseEntity.notFound().build());
+        Flux<Map<String, Object>> transactionMapFlux = clientsFlux.map(transaction -> {
+            Map<String, Object> transactionMap = new HashMap<>();
+            transactionMap.put("id", transaction.getId());
+            transactionMap.put("clientId", transaction.getClientId());
+            transactionMap.put("type", transaction.getType());
+            transactionMap.put("amount", transaction.getAmount());
+            transactionMap.put("createAt", transaction.getCreatedAt());
+            return transactionMap;
+        });
+
+        return Mono.just(ResponseEntity
+                .status(HttpStatus.OK)
+                .body(transactionMapFlux));
 
     }
 

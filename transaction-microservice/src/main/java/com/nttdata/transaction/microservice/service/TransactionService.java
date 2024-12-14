@@ -8,7 +8,7 @@ public interface TransactionService {
     Mono<Transaction> save(Mono<Transaction> transaction);
     Mono<Transaction> findById(String id);
     Flux<Transaction> findAll();
-    Mono<Transaction> findByProductId(String productId);
+    Flux<Transaction> findByClientId(String clientId);
     Mono<Transaction> update(String id, Mono<Transaction> transaction);
     Mono<Void> delete(Transaction transaction);
 }
