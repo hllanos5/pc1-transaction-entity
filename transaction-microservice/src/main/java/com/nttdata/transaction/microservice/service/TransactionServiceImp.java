@@ -3,12 +3,18 @@ package com.nttdata.transaction.microservice.service;
 import com.nttdata.transaction.microservice.domain.Transaction;
 import com.nttdata.transaction.microservice.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
 public class TransactionServiceImp implements TransactionService {
+
+    @Value("${configuracion.pasivo.limite}")
+    private String limiteMaximoMovimientosMensuales;
+
+
     @Autowired
     private TransactionRepository transactionRepository;
 
