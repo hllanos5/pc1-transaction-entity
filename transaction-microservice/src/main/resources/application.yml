@@ -4,4 +4,5 @@ spring:
   profile:
     active: development
   config:
-    import: optional:configserver:http://localhost:7070
+    import: optional:configserver:http://ms-config-server:7070
+    #import: optional:configserver:http://localhost:7070

@@ -1,0 +1,13 @@
+version: '3.7'
+services:
+  bff-bank:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8083:8083
+    networks:
+      - servicio_ntt
+networks:
+  servicio_ntt:
+    external: true
